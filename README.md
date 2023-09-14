@@ -48,52 +48,61 @@
    - Дата окончания (DATE)
 
 4. **Материалы курсов (CourseMaterials)**
-   - MaterialID (Primary Key, INT, AUTOINCREMENT)
-   - Название материала (VARCHAR(255))
-   - Содержание (TEXT)
-   - CourseID (Foreign Key, связь с Courses.CourseID)
+   - - MaterialID (Primary Key, INT, AUTOINCREMENT)
+     - Название материала (VARCHAR(255))
+     - Содержание (TEXT)
+     - CourseID (Foreign Key, связь с Courses.CourseID)
+   - Виды связей: Один ко многим (One-to-Many). Один курс может иметь много материалов.
 
 5. **Оценки (Grades)**
-   - GradeID (Primary Key, INT, AUTOINCREMENT)
-   - Оценка (DECIMAL(5, 2))
-   - UserID (Foreign Key, связь с Users.UserID)
-   - CourseID (Foreign Key, связь с Courses.CourseID)
+   - - GradeID (Primary Key, INT, AUTOINCREMENT)
+     - Оценка (DECIMAL(5, 2))
+     - UserID (Foreign Key, связь с Users.UserID)
+     - CourseID (Foreign Key, связь с Courses.CourseID)
+   - Виды связей: Множество-ко-множеству (Many-to-Many). Много пользователей может иметь много оценок в рамках множества курсов.
 
 6. **Действия пользователя (UserActions)**
-   - ActionID (Primary Key, INT, AUTOINCREMENT)
-   - UserID (Foreign Key, связь с Users.UserID)
-   - Дата и время действия (DATETIME)
-   - Описание действия (TEXT)
+   - - ActionID (Primary Key, INT, AUTOINCREMENT)
+     - UserID (Foreign Key, связь с Users.UserID)
+     - Дата и время действия (DATETIME)
+     - Описание действия (TEXT)
+   - Виды связей: Один ко многим (One-to-Many). Один пользователь может совершать много действий.
 
 7. **Преподаватели курсов (Instructors)**
-   - InstructorID (Primary Key, INT, AUTOINCREMENT)
-   - UserID (Foreign Key, связь с Users.UserID)
-   - CourseID (Foreign Key, связь с Courses.CourseID)
+   - - InstructorID (Primary Key, INT, AUTOINCREMENT)
+     - UserID (Foreign Key, связь с Users.UserID)
+     - CourseID (Foreign Key, связь с Courses.CourseID)
+   - Виды связей: Множество-ко-множеству (Many-to-Many). Много пользователей может быть преподавателями множества курсов.
 
 8. **Учащиеся курсов (Students)**
-   - StudentID (Primary Key, INT, AUTOINCREMENT)
-   - UserID (Foreign Key, связь с Users.UserID)
-   - CourseID (Foreign Key, связь с Courses.CourseID)
+   - - StudentID (Primary Key, INT, AUTOINCREMENT)
+     - UserID (Foreign Key, связь с Users.UserID)
+     - CourseID (Foreign Key, связь с Courses.CourseID)
+   - Виды связей: Множество-ко-множеству (Many-to-Many). Много пользователей может быть учащимися множества курсов.
 
 9. **Форумы курсов (CourseForums)**
-   - ForumID (Primary Key, INT, AUTOINCREMENT)
-   - Название форума (VARCHAR(255))
-   - CourseID (Foreign Key, связь с Courses.CourseID)
+   - - ForumID (Primary Key, INT, AUTOINCREMENT)
+     - Название форума (VARCHAR(255))
+     - CourseID (Foreign Key, связь с Courses.CourseID)
+   - Виды связей: Один ко многим (One-to-Many). Один курс может иметь много форумов.
 
 10. **Сообщения на форуме (ForumMessages)**
-    - MessageID (Primary Key, INT, AUTOINCREMENT)
-    - Текст сообщения (TEXT)
-    - UserID (Foreign Key, связь с Users.UserID)
-    - ForumID (Foreign Key, связь с CourseForums.ForumID)
+    - - MessageID (Primary Key, INT, AUTOINCREMENT)
+      - Текст сообщения (TEXT)
+      - UserID (Foreign Key, связь с Users.UserID)
+      - ForumID (Foreign Key, связь с CourseForums.ForumID)
+    - Виды связей: Один ко многим (One-to-Many). Один пользователь может отправлять много сообщений на форуме.
 
 11. **Оценки за задания (AssignmentGrades)**
-    - AssignmentGradeID (Primary Key, INT, AUTOINCREMENT)
-    - Оценка за задание (DECIMAL(5, 2))
-    - UserID (Foreign Key, связь с Users.UserID)
-    - AssignmentID (Foreign Key, связь с Assignments.AssignmentID)
+    - - AssignmentGradeID (Primary Key, INT, AUTOINCREMENT)
+      - Оценка за задание (DECIMAL(5, 2))
+      - UserID (Foreign Key, связь с Users.UserID)
+      - AssignmentID (Foreign Key, связь с Assignments.AssignmentID)
+    - Виды связей: Множество-ко-множеству (Many-to-Many). Много пользователей может иметь много оценок за разные задания.
 
 12. **Задания (Assignments)**
-    - AssignmentID (Primary Key, INT, AUTOINCREMENT)
-    - Название задания (VARCHAR(255))
-    - Описание задания (TEXT)
-    - CourseID (Foreign Key, связь с Courses.CourseID)
+    - - AssignmentID (Primary Key, INT, AUTOINCREMENT)
+      - Название задания (VARCHAR(255))
+      - Описание задания (TEXT)
+      - CourseID (Foreign Key, связь с Courses.CourseID)
+    - Виды связей: Один ко многим (One-to-Many). Один курс может иметь много заданий.
