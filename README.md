@@ -38,11 +38,11 @@
 
 1. **Пользователи (Users)**
    - - UserID (Primary Key, INT, AUTOINCREMENT)
+     - RoleID (Foreign Key, связь с Roles.RoleID)
      - FirstName (VARCHAR(255), UNIQUE)
      - LastName (VARCHAR(255))
      - Email (VARCHAR(255), UNIQUE)
      - Password (VARCHAR(255), HASH)
-     - Role (Foreign Key, связь с Roles.RoleID)
    - Виды связей: Один к одному (One-to-One) с сущностью "Роли".
 
 2. **Роли (Roles)**
@@ -61,7 +61,7 @@
      - CourseID (Foreign Key, связь с Courses.CourseID)
      - Name (VARCHAR(255))
      - Content (TEXT)
-   - Виды связей: Многие к одному (Many-to-One). Один курс может иметь много материалов.
+   - Виды связей: Многие к одному (Many-to-One).
 
 5. **Оценки (Grades)**
    - - GradeID (Primary Key, INT, AUTOINCREMENT)
@@ -71,14 +71,14 @@
      - Grade (INT)
      - Description (TEXT)
      - Date (DATE)
-   - Виды связей: Множество-ко-множеству (Many-to-Many). Много пользователей может иметь много оценок в рамках множества курсов.
+   - Виды связей: Множество-ко-множеству (Many-to-One).
 
 6. **Действия пользователя (UserActions)**
    - - ActionID (Primary Key, INT, AUTOINCREMENT)
      - UserID (Foreign Key, связь с Users.UserID)
      - DateAndTime (DATETIME)
      - Description (TEXT)
-   - Виды связей: Многие к одному (Many-to-One). Один пользователь может совершать много действий.
+   - Виды связей: Многие к одному (Many-to-One).
 
 7. **Преподаватели курсов (Instructors)**
    - - InstructorID (Primary Key, INT, AUTOINCREMENT)
@@ -86,7 +86,7 @@
      - CourseID (Foreign Key, связь с Courses.CourseID)
      - Description (TEXT)
      - Date (DATE)
-   - Виды связей: Множество-ко-множеству (Many-to-Many). Много пользователей может быть преподавателями множества курсов.
+   - Виды связей: Множество-ко-множеству (Many-to-Many).
 
 8. **Учащиеся курсов (Students)**
    - - StudentID (Primary Key, INT, AUTOINCREMENT)
@@ -94,28 +94,28 @@
      - CourseID (Foreign Key, связь с Courses.CourseID)
      - Description (TEXT)
      - Date (DATE)
-   - Виды связей: Множество-ко-множеству (Many-to-Many). Много пользователей может быть учащимися множества курсов.
+   - Виды связей: Множество-ко-множеству (Many-to-Many).
 
 9. **Форумы курсов (CourseForums)**
    - - ForumID (Primary Key, INT, AUTOINCREMENT)
      - CourseID (Foreign Key, связь с Courses.CourseID)
      - Name (VARCHAR(255))
-   - Виды связей: Один ко многим (One-to-Many). Один курс может иметь много форумов.
-
+   - Виды связей: Один ко многим (One-to-Many).
+   - 
 10. **Сообщения на форуме (ForumMessages)**
     - - MessageID (Primary Key, INT, AUTOINCREMENT)
       - ForumID (Foreign Key, связь с CourseForums.ForumID)
       - UserID (Foreign Key, связь с Users.UserID)
       - MessageText (TEXT)
       - Date (DATE)
-    - Виды связей: Многие к одному (Many-to-One). Один пользователь может отправлять много сообщений на форуме.
+    - Виды связей: Многие к одному (Many-to-One). 
 
 11. **Задания (Assignments)**
     - - AssignmentID (Primary Key, INT, AUTOINCREMENT)
       - CourseID (Foreign Key, связь с Courses.CourseID)
       - Name (VARCHAR(255))
       - Description (TEXT)
-    - Виды связей: Многие ко многим (Many-to-Many). Один курс может иметь много заданий.
+    - Виды связей: Многие ко многим (Many-to-One). 
 
 12. **Решения (Submission)**
     - - SubmissionID (Primary Key, INT, AUTOINCREMENT)
@@ -123,4 +123,6 @@
       - AssignmentID (Foreign Key, связь с Assignment.AssignmentID)
       - Date (DATE)
       - SolutionText (TEXT)
-    - Виды связей: Многие к одному (Many-to-One). Одно задание может иметь много решений.
+    - Виды связей: Многие к одному (Many-to-One).
+      
+![Db_Lab2 drawio](https://github.com/kolyaklimk/SQL/assets/93304825/5ad56970-9be1-4337-a655-654e1cd374fa)
