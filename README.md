@@ -124,5 +124,5 @@
       - Date (DATE)
       - SolutionText (TEXT)
     - Виды связей: Многие к одному (Many-to-One).
-      
-![Db_Lab2 drawio](https://github.com/kolyaklimk/SQL/assets/93304825/5ad56970-9be1-4337-a655-654e1cd374fa)
+
+![Db_Lab2 drawio](https://github.com/kolyaklimk/SQL/assets/93304825/16ef15d0-0954-4ffd-a8e2-c5244908d86f)
