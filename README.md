@@ -1,6 +1,8 @@
 # Климкович Николай, 153504
 # Онлайн-образовательная платформа
-# Функциональные требования:**
+
+## Функциональные требования:**
+0. **Авторизация и аутентификация пользователей.**
 
 1. **Пользователи могут:**   
    - Регистрироваться с использованием электронной почты и пароля.
@@ -27,32 +29,32 @@
    - Cоздавать сообщения на форумах курсов.
 
 5. **Форумы и общение:**
-   - Курсы имеют форумы.
+   - Курсы имеют форумы, на которых все роли могут создавать сообщения.
 
 6. **Действия пользователей:**
    - Система регистрирует действия пользователей (например, вход в систему, создание курсов, отправка сообщений на форумах).
 
-**Сущности БД:**
+## Сущности БД:
 
 1. **Пользователи (Users)**
    - - UserID (Primary Key, INT, AUTOINCREMENT)
-     - Имя (VARCHAR(255))
+     - Имя (VARCHAR(255), UNIQUE)
      - Фамилия (VARCHAR(255))
-     - Email (VARCHAR(255), Уникальный)
-     - Пароль (VARCHAR(255))
+     - Email (VARCHAR(255), UNIQUE)
+     - Пароль (VARCHAR(255), HASH)
      - Роль (Foreign Key, связь с Roles.RoleID)
    - Виды связей: Один к одному (One-to-One) с сущностью "Роли".
 
 2. **Роли (Roles)**
-   - RoleID (Primary Key, INT, AUTOINCREMENT)
-   - Название роли (VARCHAR(255))
+   - - RoleID (Primary Key, INT, AUTOINCREMENT)
+     - Название роли (VARCHAR(255))
 
 3. **Курсы (Courses)**
-   - CourseID (Primary Key, INT, AUTOINCREMENT)
-   - Название курса (VARCHAR(255))
-   - Описание (TEXT)
-   - Дата начала (DATE)
-   - Дата окончания (DATE)
+   - - CourseID (Primary Key, INT, AUTOINCREMENT)
+     - Название курса (VARCHAR(255))
+     - Описание (TEXT)
+     - Дата начала (DATE)
+     - Дата окончания (DATE)
 
 4. **Материалы курсов (CourseMaterials)**
    - - MaterialID (Primary Key, INT, AUTOINCREMENT)
@@ -66,7 +68,7 @@
      - InstructorID (Foreign Key, связь с Instructors.InstructorID)
      - StudentID (Foreign Key, связь с Students.StudentID)
      - CourseID (Foreign Key, связь с Courses.CourseID)
-     - Оценка (DECIMAL(5, 2))
+     - Оценка (INT)
      - Описание (TEXT)
      - Дата (DATE)
    - Виды связей: Множество-ко-множеству (Many-to-Many). Много пользователей может иметь много оценок в рамках множества курсов.
