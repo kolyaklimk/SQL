@@ -38,29 +38,29 @@
 
 1. **Пользователи (Users)**
    - - UserID (Primary Key, INT, AUTOINCREMENT)
-     - Имя (VARCHAR(255), UNIQUE)
-     - Фамилия (VARCHAR(255))
+     - FirstName (VARCHAR(255), UNIQUE)
+     - LastName (VARCHAR(255))
      - Email (VARCHAR(255), UNIQUE)
-     - Пароль (VARCHAR(255), HASH)
-     - Роль (Foreign Key, связь с Roles.RoleID)
+     - Password (VARCHAR(255), HASH)
+     - Role (Foreign Key, связь с Roles.RoleID)
    - Виды связей: Один к одному (One-to-One) с сущностью "Роли".
 
 2. **Роли (Roles)**
    - - RoleID (Primary Key, INT, AUTOINCREMENT)
-     - Название роли (VARCHAR(255))
+     - Name (VARCHAR(255))
 
 3. **Курсы (Courses)**
    - - CourseID (Primary Key, INT, AUTOINCREMENT)
-     - Название курса (VARCHAR(255))
-     - Описание (TEXT)
-     - Дата начала (DATE)
-     - Дата окончания (DATE)
+     - Name (VARCHAR(255))
+     - Description (TEXT)
+     - StartDate (DATE)
+     - EndDate (DATE)
 
 4. **Материалы курсов (CourseMaterials)**
    - - MaterialID (Primary Key, INT, AUTOINCREMENT)
      - CourseID (Foreign Key, связь с Courses.CourseID)
-     - Название материала (VARCHAR(255))
-     - Содержание (TEXT)
+     - Name (VARCHAR(255))
+     - Content (TEXT)
    - Виды связей: Многие к одному (Many-to-One). Один курс может иметь много материалов.
 
 5. **Оценки (Grades)**
@@ -68,59 +68,59 @@
      - InstructorID (Foreign Key, связь с Instructors.InstructorID)
      - StudentID (Foreign Key, связь с Students.StudentID)
      - CourseID (Foreign Key, связь с Courses.CourseID)
-     - Оценка (INT)
-     - Описание (TEXT)
-     - Дата (DATE)
+     - Grade (INT)
+     - Description (TEXT)
+     - Date (DATE)
    - Виды связей: Множество-ко-множеству (Many-to-Many). Много пользователей может иметь много оценок в рамках множества курсов.
 
 6. **Действия пользователя (UserActions)**
    - - ActionID (Primary Key, INT, AUTOINCREMENT)
      - UserID (Foreign Key, связь с Users.UserID)
-     - Дата и время действия (DATETIME)
-     - Описание действия (TEXT)
+     - DateAndTime (DATETIME)
+     - Description (TEXT)
    - Виды связей: Многие к одному (Many-to-One). Один пользователь может совершать много действий.
 
 7. **Преподаватели курсов (Instructors)**
    - - InstructorID (Primary Key, INT, AUTOINCREMENT)
      - UserID (Foreign Key, связь с Users.UserID)
      - CourseID (Foreign Key, связь с Courses.CourseID)
-     - Описание (TEXT)
-     - Дата (DATE)
+     - Description (TEXT)
+     - Date (DATE)
    - Виды связей: Множество-ко-множеству (Many-to-Many). Много пользователей может быть преподавателями множества курсов.
 
 8. **Учащиеся курсов (Students)**
    - - StudentID (Primary Key, INT, AUTOINCREMENT)
      - UserID (Foreign Key, связь с Users.UserID)
      - CourseID (Foreign Key, связь с Courses.CourseID)
-     - Описание (TEXT)
-     - Дата (DATE)
+     - Description (TEXT)
+     - Date (DATE)
    - Виды связей: Множество-ко-множеству (Many-to-Many). Много пользователей может быть учащимися множества курсов.
 
 9. **Форумы курсов (CourseForums)**
    - - ForumID (Primary Key, INT, AUTOINCREMENT)
      - CourseID (Foreign Key, связь с Courses.CourseID)
-     - Название форума (VARCHAR(255))
+     - Name (VARCHAR(255))
    - Виды связей: Один ко многим (One-to-Many). Один курс может иметь много форумов.
 
 10. **Сообщения на форуме (ForumMessages)**
     - - MessageID (Primary Key, INT, AUTOINCREMENT)
       - ForumID (Foreign Key, связь с CourseForums.ForumID)
       - UserID (Foreign Key, связь с Users.UserID)
-      - Текст сообщения (TEXT)
-      - Дата (DATE)
+      - MessageText (TEXT)
+      - Date (DATE)
     - Виды связей: Многие к одному (Many-to-One). Один пользователь может отправлять много сообщений на форуме.
 
 11. **Задания (Assignments)**
     - - AssignmentID (Primary Key, INT, AUTOINCREMENT)
       - CourseID (Foreign Key, связь с Courses.CourseID)
-      - Название задания (VARCHAR(255))
-      - Описание задания (TEXT)
+      - Name (VARCHAR(255))
+      - Description (TEXT)
     - Виды связей: Многие ко многим (Many-to-Many). Один курс может иметь много заданий.
 
 12. **Решения (Submission)**
     - - SubmissionID (Primary Key, INT, AUTOINCREMENT)
       - StudentID (Foreign Key, связь с Student.StudentID)      
       - AssignmentID (Foreign Key, связь с Assignment.AssignmentID)
-      - Дата (DATE)
-      - Текст решения (TEXT)
+      - Date (DATE)
+      - SolutionText (TEXT)
     - Виды связей: Многие к одному (Many-to-One). Одно задание может иметь много решений.
