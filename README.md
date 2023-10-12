@@ -42,7 +42,7 @@
      - FirstName (VARCHAR(255), UNIQUE)
      - LastName (VARCHAR(255))
      - Email (VARCHAR(255), UNIQUE)
-     - Password (VARCHAR(255), HASH)
+     - Password (VARCHAR(255))
    - Виды связей: Один к одному (One-to-One) с сущностью "Роли".
 
 2. **Роли (Roles)**
