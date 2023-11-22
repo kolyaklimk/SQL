@@ -1,0 +1,82 @@
+SELECT * FROM Users
+WHERE RoleID = (SELECT RoleID FROM Roles WHERE Name = 'Student');
+
+
+SELECT * FROM Users 
+Limit 3 OFFSET 3
+
+
+SELECT * from grades
+ORDER BY grade DESC
+
+
+SELECT * from grades
+ORDER BY grade ASC
+
+
+SELECT max(grade) from grades
+
+
+SELECT * from grades
+where grade in (1,4,5)
+
+
+SELECT * from grades
+where grade BETWEEN 1 AND 5
+
+
+SELECT DISTINCT grade from grades
+
+
+SELECT avg(grade) as avggrade from grades
+
+
+SELECT * FROM Courses
+WHERE StartDate > '2023-02-01';
+
+---------------------------
+
+UPDATE Users
+SET FirstName = 'Новое_Имя', LastName = 'Новая_Фамилия'
+WHERE UserID = 1;
+
+
+UPDATE Courses
+SET Description = 'Новое_Описание'
+WHERE CourseID = 1;
+
+
+DELETE FROM Grades
+WHERE GradeId = 4;
+
+
+DELETE FROM ForumMessages
+WHERE ForumID IN (SELECT ForumID FROM CourseForums WHERE CourseID = 2);
+
+---------------------------
+
+ALTER TABLE grades
+add test varchar(100);
+
+
+ALTER TABLE grades
+MODIFY COLUMN test SET DATA type text;
+
+
+ALTER TABLE grades
+DROP COLUMN test;
+
+---------------------------
+
+CREATE INDEX idx_user_name
+ON users (firstname, lastname);
+
+
+CREATE INDEX idx_user_name_email
+ON users (firstname, lastname, email);
+
+
+DROP INDEX idx_user_name;
+
+
+DROP INDEX idx_user_name_email;

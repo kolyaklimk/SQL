@@ -1,0 +1,127 @@
+SELECT FirstName, LastName, Email as Почта
+FROM Users
+WHERE RoleID = (SELECT RoleID FROM Roles WHERE Name = 'Student');
+
+select * from users
+where firstname like '%Студент%'
+and userid > 3
+
+select studentid, avg(grade) as средняя from grades
+group by studentid
+
+select studentid, min(grade) as минимальная from grades
+group by studentid
+
+select studentid, avg(grade) as средняя from grades
+group by studentid
+having avg(grade) > 4
+
+----------------JOIN------------------------
+SELECT Courses.*
+FROM Courses
+JOIN Students ON Courses.CourseID = Students.CourseID
+WHERE Students.StudentID = 1;
+
+SELECT Courses.courseid, Courses.name, Students.studentid
+FROM Courses
+left JOIN Students ON Courses.CourseID = Students.CourseID
+
+SELECT Courses.courseid, Courses.name, Students.studentid
+FROM Courses
+left JOIN Students ON Courses.CourseID = Students.CourseID
+
+SELECT *
+FROM grades
+full JOIN Courses ON Courses.CourseID = grades.CourseID
+order by gradeid DESC
+
+SELECT Courses.name, grades.description, grades.date
+FROM Courses
+cross JOIN grades 
+order by Courses.courseid
+
+SELECT t1.gradeid as t1_grade, t2.gradeid as t2_grade, t1.courseid as t1_course, t2.courseid as t2_course
+FROM grades t1
+join grades t2 on t1.gradeid = t2.courseid
+
+------------------------Other Join--------------------------------
+
+SELECT Users.FirstName, Users.LastName, Courses.Name, Grades.Grade
+FROM Users
+JOIN Students ON Users.UserID = Students.UserID
+JOIN Courses ON Students.CourseID = Courses.CourseID
+JOIN Grades ON Users.UserID = Grades.StudentID
+WHERE Users.RoleID = (SELECT RoleID FROM Roles WHERE Name = 'Student');
+
+
+SELECT Users.FirstName, Users.LastName, AVG(Grades.Grade) AS AverageGrade
+FROM Users
+JOIN Students ON Users.UserID = Students.UserID
+JOIN Grades ON Users.UserID = Grades.StudentID
+WHERE Users.RoleID = (SELECT RoleID FROM Roles WHERE Name = 'Student')
+GROUP BY Users.UserID;
+
+
+SELECT Users.FirstName, Users.LastName
+FROM Users
+JOIN Instructors ON Users.UserID = Instructors.UserID
+WHERE Instructors.CourseID IN (SELECT CourseID FROM Courses WHERE StartDate > '2020.01.01');
+
+----------------------Union--------------------
+select studentid from grades
+union 
+select studentid from students
+
+select studentid from grades
+union all
+select studentid from students
+
+--------------------exists----------------------
+select * from grades
+where exists (select * from courses where courseid > 5)
+
+--------------------insert into select----------------
+insert into forummessages(messageid, forumid, userid, messagetext)
+select 5,3, userid, firstname
+from users
+where userid = 6;
+
+--------------------case------------------
+select gradeid, grade,
+case 
+when grade < 4 then '< 4'
+when grade > 5 then '> 5'
+else 'error'
+end as text
+from grades
+
+----------------explain------------------
+explain select * from grades
+where grade > 5
+
+explain SELECT FirstName, LastName, Email as Почта
+FROM Users
+WHERE RoleID = (SELECT RoleID FROM Roles WHERE Name = 'Student');
+
+----------------partition------------------
+select studentid,courseid, grade
+, row_number() over(partition by studentid order by courseid)
+, rank() over(partition by studentid order by courseid)
+, dense_rank() over(partition by studentid order by courseid)
+from grades
+
+select studentid,courseid, grade
+, avg(grade) over(partition by studentid)
+, sum(grade) over(partition by studentid)
+, min(grade) over(partition by studentid)
+, max(grade) over(partition by studentid)
+, count(grade) over(partition by studentid)
+from grades
+
+select studentid,courseid, grade
+, lag(grade) over(partition by studentid )
+, lead(grade,2) over(partition by studentid )
+, lead(grade,1,-99999) over(partition by studentid )
+, first_value(grade) over(partition by studentid)
+, last_value(grade) over(partition by studentid)
+from grades
