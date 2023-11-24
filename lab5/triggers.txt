@@ -1,0 +1,95 @@
+// Триггер для логирования действия пользователя
+
+CREATE OR REPLACE FUNCTION log_user_action()
+RETURNS TRIGGER 
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO UserActions (UserID, Description)
+    VALUES (NEW.UserID, 'User action');
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER user_action_trigger
+AFTER INSERT OR UPDATE OR DELETE ON Users
+FOR EACH ROW
+EXECUTE PROCEDURE log_user_action();
+
+
+
+INSERT INTO Users ( RoleID, FirstName, LastName, Email, Password) VALUES
+    (1, 'qwerАдмин', 'asdfdsАдминович', 'hgrdeavfadsadmin@example.com', 'admin_password')
+========================================================================================
+
+// Триггер для автоматического создания форума
+
+CREATE OR REPLACE FUNCTION create_forum()
+RETURNS TRIGGER 
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO CourseForums (CourseID, Name)
+    VALUES (NEW.CourseID, 'Forum for ' || NEW.Name);
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER course_forum_trigger
+AFTER INSERT ON Courses
+FOR EACH ROW
+EXECUTE PROCEDURE create_forum();
+
+
+INSERT INTO Courses ( Name, Description, StartDate, EndDate) VALUES
+    ( 'Курс 11', 'terwОписание курса 1', '2023-01-01', '2023-02-01')
+========================================================================================
+
+// Триггер для проверки оценок студентов при добавлении новой оценки
+
+CREATE OR REPLACE FUNCTION check_grade()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF NEW.Grade > 10 THEN
+        RAISE EXCEPTION 'Grade cannot exceed 10';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER grade_check_trigger
+BEFORE INSERT OR UPDATE ON Grades
+FOR EACH ROW
+EXECUTE PROCEDURE check_grade();
+
+INSERT INTO Grades ( InstructorID, StudentID, CourseID, Grade, Description) VALUES
+    ( 1, 1, 4, 11, 'реыиавыи')
+========================================================================================
+
+// Ограничение на изменение даты начала курса
+
+CREATE OR REPLACE FUNCTION RestrictCourseStartDateChange()
+RETURNS TRIGGER 
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF NEW.StartDate < now() THEN
+        RAISE EXCEPTION 'Cannot set start date earlier than current date!';
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER RestrictCourseStartDateChangeTrigger
+BEFORE UPDATE ON Courses
+FOR EACH ROW
+EXECUTE FUNCTION RestrictCourseStartDateChange();
+
+
+UPDATE Courses
+SET Startdate = '2022.12.12'
+WHERE CourseID = 1;
+

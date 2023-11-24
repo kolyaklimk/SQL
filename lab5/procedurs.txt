@@ -1,0 +1,113 @@
+// Процедура для добавления нового курса с материалами
+
+CREATE OR REPLACE PROCEDURE add_course_with_materials(
+    course_name VARCHAR(255),
+    course_desc TEXT,
+    start_date DATE,
+    end_date DATE,
+    materials_name VARCHAR(255),
+    materials_content TEXT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    course_id INT;
+BEGIN
+    INSERT INTO Courses (Name, Description, StartDate, EndDate)
+    VALUES (course_name, course_desc, start_date, end_date)
+    RETURNING CourseID INTO course_id;
+
+    INSERT INTO CourseMaterials (CourseID, Name, Content)
+    VALUES (course_id, materials_name, materials_content);
+END;
+$$ 
+
+
+call add_course_with_materials('new course', 'decs','2023.12.12', '2024.01.01','new material','mat content')
+=====================================================================================
+
+//  Процедура для присвоения оценки студенту за задание
+
+CREATE OR REPLACE PROCEDURE assign_grade_to_student(
+    student_id INT,
+    assignment_id INT,
+    grade_value INT,
+    grade_desc TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO Grades (InstructorID, StudentID, CourseID, Grade, Description)
+    VALUES (1, student_id, (SELECT CourseID FROM Students WHERE StudentID = student_id), grade_value, grade_desc);
+END;
+$$
+
+
+call assign_grade_to_student(1,1,8,'desc')
+=====================================================================================
+
+//  Обновление даты начала и конца курса по ID курса
+
+CREATE OR REPLACE PROCEDURE update_course_dates(
+    course_id INT,
+    new_start_date DATE,
+    new_end_date DATE
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE Courses
+    SET StartDate = new_start_date, EndDate = new_end_date
+    WHERE CourseID = course_id;
+END;
+$$
+
+call  update_course_dates(1,'2024.01.01','2024.02.02')
+=====================================================================================
+
+// Получение средней оценки студента по ID студента
+
+CREATE OR REPLACE PROCEDURE get_student_average_grade(
+    student_id INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    average_grade FLOAT;
+BEGIN
+    SELECT AVG(Grade) INTO average_grade
+    FROM Grades
+    WHERE StudentID = student_id;
+
+    IF average_grade IS NULL THEN
+        RAISE NOTICE 'No grades found for this student';
+    ELSE
+        RAISE NOTICE 'Average grade for student ID % is: %', student_id, average_grade;
+    END IF;
+END;
+$$
+
+
+call  get_student_average_grade(1)
+=====================================================================================
+
+// Подсчет количества сообщений в форуме по ID форума
+
+CREATE OR REPLACE PROCEDURE count_forum_messages(
+    forum_id INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    message_count INT;
+BEGIN
+    SELECT COUNT(*) INTO message_count
+    FROM ForumMessages
+    WHERE ForumID = forum_id;
+
+    RAISE NOTICE 'Number of messages in forum ID %: %', forum_id, message_count;
+END;
+$$
+
+
+call  count_forum_messages(3)
