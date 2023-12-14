@@ -30,7 +30,8 @@ call add_course_with_materials('new course', 'decs','2023.12.12', '2024.01.01','
 
 CREATE OR REPLACE PROCEDURE assign_grade_to_student(
     student_id INT,
-    assignment_id INT,
+    instructor_id INT,
+    course_id INT,
     grade_value INT,
     grade_desc TEXT
 )
@@ -38,13 +39,13 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     INSERT INTO Grades (InstructorID, StudentID, CourseID, Grade, Description)
-    VALUES (1, student_id, (SELECT CourseID FROM Students WHERE StudentID = student_id), grade_value, grade_desc);
+    VALUES (instructor_id, student_id, course_id, grade_value, grade_desc);
 END;
 $$
 
 
 call assign_grade_to_student(1,1,8,'desc')
-=====================================================================================
+==============================================={"text":"public.count_forum_messages(forum_id)","cur":{"from":28,"to":36}}======================================
 
 //  Обновление даты начала и конца курса по ID курса
 
