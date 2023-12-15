@@ -50,14 +50,14 @@ SELECT Users.FirstName, Users.LastName, Courses.Name, Grades.Grade
 FROM Users
 JOIN Students ON Users.UserID = Students.UserID
 JOIN Courses ON Students.CourseID = Courses.CourseID
-JOIN Grades ON Users.UserID = Grades.StudentID
+JOIN Grades ON Students.StudentID = Grades.StudentID
 WHERE Users.RoleID = (SELECT RoleID FROM Roles WHERE Name = 'Student');
 
 
 SELECT Users.FirstName, Users.LastName, AVG(Grades.Grade) AS AverageGrade
 FROM Users
 JOIN Students ON Users.UserID = Students.UserID
-JOIN Grades ON Users.UserID = Grades.StudentID
+JOIN Grades ON Students.StudentID = Grades.StudentID
 WHERE Users.RoleID = (SELECT RoleID FROM Roles WHERE Name = 'Student')
 GROUP BY Users.UserID;
 

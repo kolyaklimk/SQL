@@ -14,7 +14,7 @@ static public class Users
                     while (reader.Read())
                     {
                         int userId = reader.GetInt32(0);
-                        int roleId = reader.GetInt32(1);
+                        var roleId = reader.GetValue(1);
                         string firstName = reader.GetString(2);
                         string lastName = reader.GetString(3);
                         string email = reader.GetString(4);
