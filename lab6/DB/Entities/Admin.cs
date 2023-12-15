@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using Npgsql;
-using System.Data;
+﻿using Npgsql;
 
 static public class Admin
 {
@@ -167,7 +165,7 @@ static public class Admin
                                 }
                                 break;
                             case "3":
-                                {                                    
+                                {
                                     using (var cmd3 = new NpgsqlCommand($"select * from roles", conn))
                                     {
                                         using (var reader = cmd3.ExecuteReader())
