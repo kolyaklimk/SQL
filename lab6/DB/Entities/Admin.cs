@@ -1,4 +1,6 @@
-﻿using Npgsql;
+﻿using Microsoft.VisualBasic;
+using Npgsql;
+using System.Data;
 
 static public class Admin
 {
@@ -24,6 +26,23 @@ static public class Admin
                         Console.Clear();
                         Console.WriteLine("Instructor:");
                         Console.WriteLine($"UserID: {userId},\nRoleID: {role},\nFirstName: {firstName},\nLastName: {lastName},\nEmail: {email},\nPassword: {password}\n");
+                    }
+                }
+            }
+
+
+            using (var cmd = new NpgsqlCommand($"SELECT * FROM UserActions ORDER BY DateAndTime DESC LIMIT 1;", conn))
+            {
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int actionid = reader.GetInt32(0);
+                        int userid123 = reader.GetInt32(1);
+                        DateTime date = reader.GetDateTime(2);
+                        string desc = reader.GetString(3);
+
+                        Console.WriteLine($"Last action: Actionid: {actionid}, UserId: {userid123}, DateTime: {date}, Description: {desc}\n");
                     }
                 }
             }
