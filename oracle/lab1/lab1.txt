@@ -6,5 +6,18 @@ create table MY_TABLE
     val  number
 )
 
-2. Напишите анонимный блок, который записывает в таблицу MyTable 10 000 целых случайных записей.
+2. Напишите анонимный блок, который записывает в таблицу MyTable 10 000 целых 
+случайных записей.
 
+DECLARE
+    rand_num NUMBER;
+BEGIN
+    FOR i IN 1..10000 LOOP
+        rand_num := DBMS_RANDOM.VALUE(1, 99);
+        INSERT INTO My_Table(id, val) VALUES (i, ROUND(rand_num));
+    END LOOP;
+END;
+
+3. Напишите собственнуюфункцию, которая выводит TRUE если четных 
+значений val в таблице MyTable больше, FALSE если больше нечетных 
+значений и EQUAL если количество четных и нечетных равно
