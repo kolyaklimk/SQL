@@ -1,0 +1,10 @@
+1.Создайте таблицу MyTable(id number, val number)
+
+create table MY_TABLE
+(
+    id number,
+    val  number
+)
+
+2. Напишите анонимный блок, который записывает в таблицу MyTable 10 000 целых случайных записей.
+
