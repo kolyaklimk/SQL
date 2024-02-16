@@ -48,3 +48,17 @@ end;
 
 вызов
 select even_odd() from dual
+
+
+4. Напишите функцию, которая по введенному значению ID, сгенерирует и выведет в консоль текстовое значение команды insert для вставки указанной строки.
+
+CREATE OR REPLACE FUNCTION insert_generate(find_id NUMBER) RETURN VARCHAR2 IS
+    command VARCHAR2(999);
+BEGIN
+    SELECT 'INSERT INTO my_table (id, val) VALUES (' || find_id || ', ' || val || ')' INTO command FROM my_table WHERE id = find_id;
+    IF command IS NOT NULL AND LENGTH(command) > 0 THEN 
+        RETURN command;
+    ELSE
+        RETURN 'Id not found';
+    end if;
+END;
