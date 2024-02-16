@@ -50,6 +50,7 @@ end;
 select even_odd() from dual
 
 
+
 4. Напишите функцию, которая по введенному значению ID, сгенерирует и выведет в консоль текстовое значение команды insert для вставки указанной строки.
 
 CREATE OR REPLACE FUNCTION insert_generate(find_id NUMBER) RETURN VARCHAR2 IS
@@ -61,4 +62,40 @@ BEGIN
     EXCEPTION
     when NO_DATA_FOUND then
         return 'Id not found';
+END;
+
+вызов
+select insert_generate(123) from dual
+
+
+
+5. Написать процедуры, реализующие DML операции (INSERT, UPDATE, DELETE) для указанной таблицы.
+
+CREATE OR REPLACE PROCEDURE insert_data(id_insert NUMBER, val_insert NUMBER) AS
+BEGIN
+    INSERT INTO my_table (id, val) VALUES (id_insert, val_insert);
+    COMMIT;
+END;
+
+
+CREATE OR REPLACE PROCEDURE delete_data(id_delete NUMBER) AS
+BEGIN
+    DELETE FROM my_table WHERE id = id_delete;
+    COMMIT;
+END;
+
+
+CREATE OR REPLACE PROCEDURE update_data(id_update NUMBER, val_update NUMBER) AS
+BEGIN
+    UPDATE my_table SET val = val_update WHERE id = id_update;
+    COMMIT;
+END;
+
+
+вызов.
+DECLARE
+    id_value NUMBER := 11111; 
+    val_value NUMBER := 42; 
+BEGIN
+    insert_data(id_value, val_value);
 END;
