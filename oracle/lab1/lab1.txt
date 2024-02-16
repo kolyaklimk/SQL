@@ -28,16 +28,23 @@ END;
 значений и EQUAL если количество четных и нечетных равно.
 
 create or replace function even_odd
-return boolean
+return VARCHAR2
 is
     even_count number;
     odd_count number;
 begin
     select COUNT(val) into even_count from my_table where mod(val, 2) = 0;
     select COUNT(val) into odd_count from my_table where mod(val, 2) = 1;
+    
     if even_count > odd_count then
-        return true;
+        return 'TRUE';
+    elsif even_count < odd_count then
+        return 'FALSE';
     else
-        return false;
+        return 'EQUAL';
     end if;
 end;
+
+
+вызов
+select even_odd() from dual
