@@ -99,3 +99,22 @@ DECLARE
 BEGIN
     insert_data(id_value, val_value);
 END;
+
+
+
+6. Создайте функцию, вычисляющую общее вознаграждение за год. На вход функции подаются значение месячной зарплаты и процент годовых премиальных. В общем случае общее вознаграждение= (1+ процент годовых премиальных)*12* значение месячной зарплаты. При этом предусмотреть что процент вводится как целое число, и требуется преобразовать его к дробному. Предусмотреть защиту от ввода некорректных данных.
+
+CREATE OR REPLACE FUNCTION annual_remuneration(salary NUMBER, percent INTEGER) RETURN NUMBER
+IS
+BEGIN
+    IF salary IS NULL OR percent IS NULL OR percent < 0 OR salary < 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Incorrect data');
+    END IF;
+
+    RETURN (1 + percent / 100.0) * 12 * salary;
+        
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20002, SQLERRM);
+END;
+
