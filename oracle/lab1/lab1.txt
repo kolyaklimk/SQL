@@ -67,7 +67,8 @@ END;
 вызов
 select insert_generate(123) from dual
 
-
+также If SQL%NOTFOUND THEN
+      end if;
 
 5. Написать процедуры, реализующие DML операции (INSERT, UPDATE, DELETE) для указанной таблицы.
 
@@ -117,4 +118,21 @@ EXCEPTION
     WHEN OTHERS THEN
         RAISE_APPLICATION_ERROR(-20002, SQLERRM);
 END;
+
+
+
+7. Доп задание
+CREATE OR REPLACE FUNCTION task_fun(id2 NUMBER, val2 NUMBER) RETURN VARCHAR2 IS
+    count_s NUMBER;
+BEGIN
+
+    SELECT COUNT(*) INTO count_s  FROM my_table WHERE id = id2;
+    
+    IF count_s > 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Error');
+    ELSE
+        RETURN 'INSERT INTO my_table (id, val) VALUES (' || id2 || ', ' || val2 || ')';
+    END IF;    
+END;
+
 
