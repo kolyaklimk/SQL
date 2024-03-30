@@ -151,4 +151,16 @@ END;
 
 
 6. Реализовать триггер, который в случае изменения данных в таблице STUDENTS будет соответственно обновлять информацию C_VAL таблицы GROUPS
- 
+
+CREATE OR REPLACE TRIGGER update_c_val_in_groups
+AFTER INSERT OR UPDATE OR DELETE ON Students 
+BEGIN
+    FOR group_rec IN (
+        SELECT group_id, COUNT(*) AS group_count
+        FROM Students GROUP BY group_id
+    ) LOOP
+        UPDATE Groups
+        SET c_val = group_rec.group_count       
+        WHERE id = group_rec.group_id;
+    END LOOP;
+END;
