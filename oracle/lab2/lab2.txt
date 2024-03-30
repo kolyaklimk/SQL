@@ -92,7 +92,7 @@ END;
 4. Реализовать триггер реализующий журналирование всех действий над данными таблицы STUDENTS.
 
 CREATE TABLE Students_Log (
-    log_id NUMBER PRIMARY KEY,
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     action VARCHAR2(50),
     student_id NUMBER,
     student_name VARCHAR2(100),
