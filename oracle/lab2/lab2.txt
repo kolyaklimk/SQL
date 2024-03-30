@@ -11,3 +11,32 @@ CREATE TABLE Groups (
     name VARCHAR2(100) NOT NULL,
     c_val NUMBER NOT NULL
 );
+
+
+2. Реализовать триггеры для таблиц задания 1 проверку целостности (проверка на уникальность полей ID), генерацию автоинкрементного ключа и проверку уникальности для поля GROUP.NAME
+
+CREATE OR REPLACE TRIGGER is_student_id_unique
+BEFORE INSERT OR UPDATE OF id ON Students
+FOR EACH ROW
+DECLARE
+    count_of_id NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO count_of_id
+    FROM Students WHERE id = :NEW.id;
+
+    IF count_of_id > 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'ID is not unique students table');
+    END IF;
+END;
+
+
+CREATE OR REPLACE TRIGGER autoincrement_student_id
+BEFORE INSERT ON Students
+FOR EACH ROW
+BEGIN
+    IF :NEW.id IS NULL THEN
+        SELECT COALESCE(MAX(id), 0) + 1
+        INTO :NEW.id FROM Students;
+    END IF;
+END;
+
