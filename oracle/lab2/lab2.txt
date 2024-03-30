@@ -115,3 +115,40 @@ BEGIN
         VALUES ('DELETE', :OLD.id, :OLD.name, :OLD.group_id);
     END IF;
 END;
+
+5. Исходя из данных предыдущей задачи, реализовать процедуру для восстановления информации на указанный временной момент и на временное смещение.
+
+CREATE OR REPLACE PROCEDURE restore_student (
+    time_restore TIMESTAMP,
+    offset_min NUMBER DEFAULT NULL
+) AS
+    time_for_restore TIMESTAMP;
+    is_student_exist NUMBER;
+BEGIN
+    IF offset_min IS NOT NULL THEN
+        time_for_restore := time_restore + (offset_min / (24 * 60)); 
+    ELSE
+        time_for_restore := time_restore;
+    END IF;
+
+    FOR log_rec IN (
+        SELECT *
+        FROM Students_Log
+        WHERE log_date <= time_for_restore
+        ORDER BY log_date DESC
+    ) LOOP
+        SELECT COUNT(*)
+        INTO is_student_exist
+        FROM Students
+        WHERE id = log_rec.student_id;
+
+        IF is_student_exist = 0 AND log_rec.action = 'DELETE' THEN
+            INSERT INTO Students (id, name, group_id)
+            VALUES (log_rec.student_id, log_rec.student_name, log_rec.group_id);
+        END IF;
+    END LOOP;
+END;
+
+
+6. Реализовать триггер, который в случае изменения данных в таблице STUDENTS будет соответственно обновлять информацию C_VAL таблицы GROUPS
+ 
