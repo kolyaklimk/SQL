@@ -150,6 +150,11 @@ BEGIN
 END;
 
 
+DELETE FROM Students
+WHERE id = 3;
+
+call restore_student(CURRENT_TIMESTAMP, 60);
+
 6. Реализовать триггер, который в случае изменения данных в таблице STUDENTS будет соответственно обновлять информацию C_VAL таблицы GROUPS
 
 CREATE OR REPLACE TRIGGER update_c_val_in_groups
