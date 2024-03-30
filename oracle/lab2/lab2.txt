@@ -29,6 +29,20 @@ BEGIN
     END IF;
 END;
 
+CREATE OR REPLACE TRIGGER is_group_id_unique
+BEFORE INSERT OR UPDATE OF id ON Groups
+FOR EACH ROW
+DECLARE
+    count_of_id NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO count_of_id
+    FROM Groups WHERE id = :NEW.id;
+
+    IF count_of_id > 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'ID is not unique groups table');
+    END IF;
+END;
+
 
 CREATE OR REPLACE TRIGGER autoincrement_student_id
 BEFORE INSERT ON Students
@@ -37,6 +51,16 @@ BEGIN
     IF :NEW.id IS NULL THEN
         SELECT COALESCE(MAX(id), 0) + 1
         INTO :NEW.id FROM Students;
+    END IF;
+END;
+
+CREATE OR REPLACE TRIGGER autoincrement_group_id
+BEFORE INSERT ON Groups
+FOR EACH ROW
+BEGIN
+    IF :NEW.id IS NULL THEN
+        SELECT COALESCE(MAX(id), 0) + 1
+        INTO :NEW.id FROM Groups;
     END IF;
 END;
 
