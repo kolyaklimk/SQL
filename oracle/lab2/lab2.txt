@@ -77,3 +77,41 @@ BEGIN
         RAISE_APPLICATION_ERROR(-20002, 'Name is not unique in Groups');
     END IF;
 END;
+
+
+3. Реализовать триггер реализующий Foreign Key с каскадным удалением между таблицами STUDENTS и GROUPS.
+
+CREATE OR REPLACE TRIGGER cascade_delete_student
+BEFORE DELETE ON Groups
+FOR EACH ROW
+BEGIN
+    DELETE FROM Students WHERE group_id = :OLD.id;
+END;
+
+
+4. Реализовать триггер реализующий журналирование всех действий над данными таблицы STUDENTS.
+
+CREATE TABLE Students_Log (
+    log_id NUMBER PRIMARY KEY,
+    action VARCHAR2(50),
+    student_id NUMBER,
+    student_name VARCHAR2(100),
+    group_id NUMBER,
+    log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE OR REPLACE TRIGGER student_logging
+AFTER INSERT OR UPDATE OR DELETE ON Students
+FOR EACH ROW
+BEGIN
+    IF INSERTING THEN
+        INSERT INTO Students_Log (action, student_id, student_name, group_id)
+        VALUES ('INSERT', :NEW.id, :NEW.name, :NEW.group_id);
+    ELSIF UPDATING THEN
+        INSERT INTO Students_Log (action, student_id, student_name, group_id)
+        VALUES ('UPDATE', :OLD.id, :OLD.name, :OLD.group_id);
+    ELSIF DELETING THEN
+        INSERT INTO Students_Log (action, student_id, student_name, group_id)
+        VALUES ('DELETE', :OLD.id, :OLD.name, :OLD.group_id);
+    END IF;
+END;
