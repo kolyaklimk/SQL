@@ -64,3 +64,16 @@ BEGIN
     END IF;
 END;
 
+CREATE OR REPLACE TRIGGER is_group_name_unique
+BEFORE INSERT OR UPDATE OF name ON Groups
+FOR EACH ROW
+DECLARE
+    name_is_exist NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO name_is_exist
+    FROM Groups WHERE name = :NEW.name;
+
+    IF name_is_exist > 0 THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Name is not unique in Groups');
+    END IF;
+END;
