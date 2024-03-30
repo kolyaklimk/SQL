@@ -118,6 +118,7 @@ END;
 
 5. Исходя из данных предыдущей задачи, реализовать процедуру для восстановления информации на указанный временной момент и на временное смещение.
 
+
 CREATE OR REPLACE PROCEDURE restore_student (
     time_restore TIMESTAMP,
     offset_min NUMBER DEFAULT NULL
@@ -131,20 +132,17 @@ BEGIN
         time_for_restore := time_restore;
     END IF;
 
-    FOR log_rec IN (
-        SELECT *
-        FROM Students_Log
+    FOR rec IN (
+        SELECT * FROM Students_Log
         WHERE log_date <= time_for_restore
         ORDER BY log_date DESC
     ) LOOP
-        SELECT COUNT(*)
-        INTO is_student_exist
-        FROM Students
-        WHERE id = log_rec.student_id;
+        SELECT COUNT(*) INTO is_student_exist
+        FROM Students WHERE id = rec.student_id;
 
-        IF is_student_exist = 0 AND log_rec.action = 'DELETE' THEN
+        IF is_student_exist = 0 AND rec.action = 'DELETE' THEN
             INSERT INTO Students (id, name, group_id)
-            VALUES (log_rec.student_id, log_rec.student_name, log_rec.group_id);
+            VALUES (rec.student_id, rec.student_name, rec.group_id);
         END IF;
     END LOOP;
 END;
