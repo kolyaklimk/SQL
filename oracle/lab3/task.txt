@@ -1,0 +1,30 @@
+create table dev_schema.t1(
+    id number not null primary key,
+    fk number not null
+);
+/
+create table dev_schema.t2(
+    id number not null primary key,
+    fk number not null
+);
+/
+create table dev_schema.t3(
+    id number not null primary key,
+    fk number not null
+);
+
+alter table dev_schema.t1 add constraint t3_id_fk foreign key (fk) references dev_schema.t3(id);
+alter table dev_schema.t3 add CONSTRAINT t2_id_fk FOREIGN KEY ( fk ) REFERENCES dev_schema.t2 ( id );
+
+
+
+
+create or replace procedure dev.deleteMyTable
+    ( del_id in number )
+is
+begin
+    delete from dev.MyTable where id=del_id;
+end;
+
+
+CREATE unique INDEX dev.indx_client_name ON dev.Client(ClientName);

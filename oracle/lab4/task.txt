@@ -1,0 +1,159 @@
+DECLARE
+    json_content VARCHAR2(32000) := '{
+    "select": {
+        "what": ["*"],
+        "from": ["t1"],
+        "join": [
+            {
+                "join_type": "right",
+                "table": "t2",
+                "on": {
+                    "comparison": {
+                        "col": "t2.t1_k",
+                        "comparator": "=",
+                        "value": "t1.id"
+                    }
+                }
+            }
+        ],
+        "where": {
+            "comparison": {
+                "col": "t1.id",
+                "comparator": "in",
+                "value": {
+                    "select": {
+                        "what": ["id"],
+                        "from": ["t2"],
+                        "where": {
+                            "and": [
+                                {
+                                    "between": {
+                                        "col": "num",
+                                        "min": 2,
+                                        "max": 4
+                                    }
+                                },
+                                {
+                                    "comparison": {
+                                        "col": "val",
+                                        "comparator": "like",
+                                        "value": "%a%"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}';
+BEGIN
+    DBMS_OUTPUT.PUT_LINE
+    (jparser.parse_JSON_to_SQL(JSON_OBJECT_T(json_content)));
+END;
+
+
+-- with group by
+DECLARE
+    json_content VARCHAR2(32000) := '{
+    "select": {
+        "what": ["t1.id", "t1.name", "SUM(t2.value) as total_value"],
+        "from": ["table1 t1"],
+        "join": [
+            {
+                "join_type": "inner",
+                "table": "table2 t2",
+                "on": {
+                    "comparison": {
+                        "col": "t2.t1_id",
+                        "comparator": "=",
+                        "value": "t1.id"
+                    }
+                }
+            }
+        ],
+        "where": {
+            "and": [
+                {
+                    "comparison": {
+                        "col": "t1.age",
+                        "comparator": ">",
+                        "value": "18"
+                    }
+                },
+                {
+                    "comparison": {
+                        "col": "t2.status",
+                        "comparator": "=",
+                        "value": "''active''"
+                    }
+                }
+            ]
+        },
+        "group by": ["t1.id", "t1.name"]
+    }
+}
+';
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(jparser.parse_JSON_to_SQL(JSON_OBJECT_T(json_content)));
+END;
+
+-- drop table
+DECLARE
+    json_content VARCHAR2(32000) := '{
+    "DDL": {
+        "type": "drop",
+        "tab_name": "table_name"
+    }
+}
+';
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(jparser.parse_JSON_to_SQL(JSON_OBJECT_T(json_content)));
+END;
+
+-- drop table
+DECLARE
+    json_content VARCHAR2(32000) := '{
+    "DDL": {
+        "type": "create",
+        "tab_name": "employees",
+        "columns": [
+            {
+                "col_name": "employee_id",
+                "data_type": "NUMBER",
+                "inline_constraints": ["PRIMARY KEY"]
+            },
+            {
+                "col_name": "first_name",
+                "data_type": "VARCHAR",
+                "inline_constraints": ["NOT NULL"]
+            },
+            {
+                "col_name": "last_name",
+                "data_type": "VARCHAR",
+                "inline_constraints": ["NOT NULL"]
+            },
+            {
+                "col_name": "email",
+                "data_type": "VARCHAR",
+                "inline_constraints": ["UNIQUE"]
+            },
+            {
+                "col_name": "department_id",
+                "data_type": "NUMBER",
+                "inline_constraints": ["REFERENCES departments(department_id)"]
+            }
+        ]
+    }
+}
+
+';
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(jparser.parse_JSON_to_SQL(JSON_OBJECT_T(json_content)));
+END;
+
+
+
+
+
